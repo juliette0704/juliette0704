@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+from math import *
+import math
+from operator import *
+import sys
+
+def main():
+    if (len(sys.argv) != 8):
+        print("./101pong x0 y0 z0 x1 y1 z1 n")
+        sys.exit(84)
+    x0,y0,z0 = float(sys.argv[1]),float(sys.argv[2]),float(sys.argv[3])
+    x1,y1,z1 = float(sys.argv[4]),float(sys.argv[5]),float(sys.argv[6])
+    a = int(sys.argv[7])
+    x2,y2,z2 = x1+a*(x1-x0),y1+a*(y1-y0),z1+a*(z1-z0)
+    if (a < 0):
+        print("./101pong x0 y0 z0 x1 y1 z1 n")
+        sys.exit(84)
+    print("The velocity vector of the ball is:")
+    print(("(%.2f, %.2f, %.2f)") %(x1-x0 , y1-y0 ,z1-z0))
+    print("At time t + 1, ball coordinates will be:")
+    print(("(%.2f, %.2f, %.2f)") %(x2 , y2 ,z2))
+    if ((z2-z1 == 0) and (z2 != 0)):
+        print("The ball won’t reach the paddle.")
+        sys.exit(84)
+    angle = 90-(acos(abs(z1-z0)/sqrt(pow(x1-x0, 2)+pow(y1-y0, 2)+pow(z1-z0, 2))))*180/math.pi
+    print("The incidence angle is:")
+    print(("%.2f") %(angle))
+
+main()

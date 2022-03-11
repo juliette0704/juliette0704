@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+
+from math import *
+import math
+from operator import *
+import sys
+
+debut = 0.5 
+debut2 = 0   
+fin = 1
+max_iter = 200
+try : 
+    param = [int(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5]), float(sys.argv[6]), int(sys.argv[7])]
+except :
+    sys.stderr.write('./105torus opt a0 a1 a2 a3 a4 n\n')
+    sys.exit(84)
+precision = 10 ** - (param[6])
+opt = param[0]
+
+def f(x) :
+    return param[5]*x**4+param[4]*x**3+param[3]*x**2+param[2]*x+param[1]
+
+def df(x) :
+    return 4*param[5]*x**3+3*param[4]*x**2+2*param[3]*x+param[2]
+
+def bisection(debut, fin, precision):
+    pt = round(float(debut), param[6])
+    print('x =', pt)
+    if (f(debut)*f(fin))>0:
+        print ('No solution between limits') 
+        return
+    x0=debut
+    x1=fin
+    for n in range(0,max_iter):
+        x2=(x0+x1)/2
+        pt2 = round(float(x2), param[6])
+        print('x =', pt2)
+        if f(x0) * f(x2) < 0 :
+          x1 = x2
+          if abs(f(x1))<precision:
+             return  
+        else:
+          x0 = x2
+    return  None
+
+def newton(debut, fin, precision) :
+    xn = debut
+    if (f(debut) * f(fin)) > 0 :
+        print('No solution between limits')
+        return
+    for n in range(0, max_iter) :
+        fxn = f(xn)
+        pt= round(float(xn), param[6])
+        print( 'x = ', pt)
+        if abs(fxn) < precision :
+            return xn
+        dfxn = df(xn)
+        if dfxn == 0 :
+            print('Zero derivative. No solution found.')
+            return None
+        xn = xn - fxn/dfxn
+    print('Exceeded maximum iterations. No solution found.')
+    return None
+
+def secant(debut, fin, precision) :
+    a_n = debut
+    b_n = fin
+    print ('x =',a_n)
+    for n in range(0,max_iter) :
+        m_n = a_n - f(a_n)*(b_n - a_n)/(f(b_n) - f(a_n))
+        f_m_n = f(m_n)
+        pt = round(float(m_n), param[6])
+        print ( 'x =', pt)
+        if abs(f_m_n) < precision :
+            return None
+        if f(a_n) * f_m_n < 0 :
+            a_n = a_n
+            b_n = m_n
+        elif f(b_n) * f_m_n < 0 :
+            a_n = m_n
+            b_n = b_n
+        elif f_m_n == 0 :
+            print("Found exact solution.")
+            return m_n
+        else:
+            print("Secant method fails.")
+            return None
+    return a_n - f(a_n) * (b_n - a_n) / (f(b_n) - f(a_n))
+
+def main() :
+    if (len(sys.argv) != 8) :
+        sys.stderr.write('./104intersection opt xp yp zp xv yv zv p\n')
+        sys.exit(84)
+    if f(debut) * f(fin) > 0.0 :
+        print('Given guess values do not bracket the root.')
+    else :
+        if opt == 1 :
+            bisection(debut,fin,precision)
+        elif opt == 2 :
+            newton(debut, fin ,precision)
+        elif opt == 3 :
+            secant(debut, fin, precision)
+        else :
+            sys.stderr.write("is an invalid option\n")
+main()

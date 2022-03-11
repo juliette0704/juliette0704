@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+
+from math import *
+import math
+from operator import *
+import sys
+from typing import Optional
+
+def calc_delta(a, b ,c) :
+    return (b * b) - (4 * (a * c))
+
+def report_point(k, xp, yp, zp, xv, yv, zv, p) :
+    print("Line passing through the point (%.0f, %.0f, %.0f) and parallel to the vector (%.0f, %.0f, %.0f)" %(xp, yp, zp, xv, yv, zv))
+    if (k == []) :
+        print("No intersection point.")
+        return
+    if (len(k) == 1) :
+        if (k[0] == 0) :
+            return [0]
+        print("1 intersection point.")
+        print(("(%.3f, %.3f, %.3f)") %(xp + k[0] * xv, yp + k[0] * yv, zp + k[0] * zv))
+    else :
+        print("2 intersection points.")
+        print(("(%.3f, %.3f, %.3f)") %(xp + k[1] * xv, yp + k[1] * yv, zp + k[1] * zv))
+        print(("(%.3f, %.3f, %.3f)") %(xp + k[0] * xv, yp + k[0] * yv, zp + k[0] * zv))
+
+def res_second_deg(a, b, c) :
+    delta = calc_delta(a, b, c)
+    if (delta > 0) :
+        racine = math.sqrt(delta)
+        retour = [(-b-racine )/ (2 * a), (-b + racine )/ (2*a)]
+    elif (delta < 0) :
+        retour = []
+    else :
+        if (a == 0) :
+            print("There is an infinite number of intersection points.")
+            return [0]
+        else :
+            retour = [-b/(2 * a)]
+    return retour
+
+def intersect(opt, xp, yp, zp, xv, yv, zv, p) :
+    if (opt == 1) :
+        print(("Sphere of radius %.0f") %(p))
+        a = xv**2 + yv**2 + zv**2
+        b = 2* (xp*xv + yp*yv + zp*zv)
+        c = xp**2 + yp**2 + zp**2 - p**2
+        result = res_second_deg(a, b, c)
+        report_point(result, xp, yp, zp, xv, yv, zv, p)
+    if (opt == 2) :
+        print(("Cylinder of radius %.0f") %(p))
+        a = xv**2 + yv**2
+        b = 2* (xp*xv + yp*yv)
+        c = xp**2 + yp**2 - p**2
+        result = res_second_deg(a, b, c)
+        report_point(result, xp, yp, zp, xv, yv, zv, p)
+    if (opt == 3) :
+        print(("Cone with a %.0f degree angle") %(p))
+        p = p * (math.pi / 180)
+        p = tan(p)
+        a = xv**2 + yv**2 - ((zv**2) * (p**2))
+        b = 2* (xp*xv + yp*yv - ((zp * zv) * (p**2)))
+        c = xp**2 + yp**2 - ((zp**2) * (p**2))
+        result = res_second_deg(a, b, c)
+        report_point(result, xp, yp, zp, xv, yv, zv, p)
+    return result
+
+def main():
+    if (len(sys.argv) != 9): 
+        sys.stderr.write('./104intersection opt xp yp zp xv yv zv p\n')
+        sys.exit(84)
+    try :
+        opt = int(sys.argv[1])
+        xp = float(sys.argv[2])
+        yp = float(sys.argv[3])
+        zp = float(sys.argv[4])
+        xv = float(sys.argv[5])
+        yv = float(sys.argv[6])
+        zv = float(sys.argv[7])
+        p = float(sys.argv[8])
+    except :
+        sys.stderr.write('./104intersection opt xp yp zp xv yv zv p\n')
+        sys.exit(84)
+    k = intersect(opt, xp, yp, zp, xv, yv, zv, p)
+main()

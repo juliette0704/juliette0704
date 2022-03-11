@@ -1,0 +1,131 @@
+#!/usr/bin/python3
+
+import sys
+
+def get_determinant(matrix):
+    if len(matrix) == 2:
+        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
+
+    determinant = 0
+    for c in range(len(matrix)):
+        determinant += ((- 1)**c)*matrix[0][c] * get_determinant([line[:c] + line[c + 1:] for line in (matrix[:0] + matrix[0 + 1:])])
+    return determinant
+
+def cofact(r, matrix, determinant, cofactors) :
+        for c in range(len(cofactors)):
+            cofactors[r][c] = cofactors[r][c]/determinant
+        return cofactors
+
+def inverse_mat(matrix):
+    determinant = get_determinant(matrix)
+    if len(matrix) == 2:
+        return [[matrix[1][1]/determinant, - 1 *matrix[0][1]/determinant],
+                [ - 1 *matrix[1][0]/determinant, matrix[0][0]/determinant]]
+    cofactors = []
+    for r in range(len(matrix)):
+        cofactorline = []
+        for c in range(len(matrix)):
+            minor = [line[:c] + line[c + 1:] for line in (matrix[:r] + matrix[r + 1:])]
+            cofactorline.append(((- 1)**(r + c)) * get_determinant(minor))
+        cofactors.append(cofactorline)
+    cofactors = map(list, zip(*cofactors))
+    cofactors = list(cofactors)
+    for r in range(len(cofactors)):
+        cofactors = cofact(r, matrix, determinant, cofactors)
+    return cofactors
+
+def multiply_mat(matrix1, matrix2, maxline, maxcol):
+    result_matrix = []
+    for line in range(maxline):
+        text_line = []
+        for col in range(maxcol):
+            valuetoadd = 0
+            for each in range (maxcol):
+                valuetoadd += matrix1[line][each] * matrix2[each][col]
+            text_line.append(valuetoadd)
+        result_matrix.append(text_line)
+    return result_matrix
+
+if len(sys.argv) != 4:
+    raise ValueError ("103cipher [message] [key] [flag]")
+text = sys.argv[1]
+key = sys.argv[2]
+flag = int(sys.argv[3])
+
+key_ascii_values = []
+text_ascii_values = []
+
+for character in key:
+    key_ascii_values.append(ord(character))
+
+if flag == 0:
+    for character in text:
+        text_ascii_values.append(ord(character))
+else :
+    text_ascii_values = text.split()
+    text_ascii_values = list(map(int, text_ascii_values))
+
+key_matrix_size = len(key)
+while float.is_integer(pow(key_matrix_size,0.5)) == False:    
+    key_matrix_size += 1
+    key_ascii_values.append(0)
+key_matrix_size = pow(key_matrix_size,0.5)
+key_matrix_size = int(key_matrix_size)
+
+text_matrix_size = len(text_ascii_values)
+while float.is_integer(text_matrix_size/key_matrix_size) == False:
+    text_matrix_size += 1
+    text_ascii_values.append(0)
+text_matrix_line = int(text_matrix_size/key_matrix_size)
+
+key_matrix = []
+for line in range(key_matrix_size):
+    key_line = []
+    for col in range(key_matrix_size):
+        key_line.append(key_ascii_values[(line*key_matrix_size)+col])
+    key_matrix.append(key_line)
+if flag == 0:
+    print ("Key matrix :\r")
+    for i in range (key_matrix_size):
+        for j in range (key_matrix_size):
+            print(key_matrix[i][j], end='\t')
+        print(" ")
+    print("\r")
+
+text_matrix = []
+for line in range(text_matrix_line):
+    text_line = []
+    for col in range(key_matrix_size):
+        text_line.append(text_ascii_values[(line*key_matrix_size)+col])
+    text_matrix.append(text_line)
+
+if flag == 0:
+    print("Encrypted message: \r")
+    result_matrix = multiply_mat(text_matrix,key_matrix,text_matrix_line,key_matrix_size)
+    encoded_text = ""
+    for i in range(text_matrix_line) :
+        for j in range(key_matrix_size):
+            encoded_text += str(result_matrix[i][j]) + " "
+    print(encoded_text)
+else :
+    result_matrix = text_matrix
+    inverse_key = inverse_mat(key_matrix)
+    print ("Key matrix :\r")
+    for i in range (key_matrix_size):
+        for j in range (key_matrix_size):
+            print(round(inverse_key[i][j], 3), end = '\t')
+        print(" ")   
+    print("\r")
+
+    decode_matrix = multiply_mat(result_matrix, inverse_key, text_matrix_line, key_matrix_size)
+
+    flat_result = []
+    for i in range(text_matrix_line) :
+        for j in range(key_matrix_size):
+            flat_result.append(decode_matrix[i][j])
+    new_text = ""
+    for i in flat_result:
+        new_text += chr(round(i))
+
+    print("Decrypted message:")
+    print(new_text)

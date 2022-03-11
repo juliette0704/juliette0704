@@ -1,0 +1,36 @@
+param[5] * x ** 4 + param[4] * x ** 3 + param[3] * x ** 2 + param[2] * x + param[1]
+pour f prime
+return 4 * param[5] * x ** 3 + 3 * param[4] * x ** 2 + 2 * param[3] * x + param[2]
+pour df()
+
+bisection 
+x2 = (x0 + x1) / 2
+si f(x0) * f(x2) < 0 :
+x1 = x2
+si abs(f(x1)) < precision alors return
+
+newton
+si (f(debut) * f(fin)) > 0
+pas de solution entre les limites
+pour n entre 0 et max 
+fxn = f(xn)
+si abs(fxn) < precision
+alors return xn
+
+secante
+pour zero a max
+m_n = a_n - f(a_n) * (b_n - a_n) / (f(b_n) - f(a_n))
+f_m_n = f(m_n)
+
+si abs(f_m_n) < precision alors 
+return None
+si f(a_n) * f_m_n < 0 alors
+a_n = a_n
+b_n = m_n
+sinon f(b_n) * f_m_n < 0 alors
+a_n = m_n
+b_n = b_n
+sinon si f_m_n == 0 alors
+return m_n
+sinon 
+return a_n - f(a_n) * (b_n - a_n) / (f(b_n) - f(a_n))

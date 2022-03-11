@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+
+from dataclasses import dataclass
+
+import sys
+
+param = [int(sys.argv[1]), float(sys.argv[2])]
+max_iter = 101
+n = 10
+n = param[0]
+k = 3.3
+k = param[1]
+i0 = 1
+i1 = 100
+my_list =  n, k ,i0, i1 
+x1 = my_list[0]
+k = my_list[1]
+maxpop = 1000
+x = x1
+
+for n in range(1,max_iter):
+    y = k * x * ((maxpop - x) / maxpop)
+    print(n, "%.2f" %(x))
+    x = y
