@@ -74,7 +74,6 @@ void imperfect_maze(maze_t *maze)
     int i = 1;
     stacktogo_t *stackv = malloc(sizeof(stacktogo_t));
     stacktogo_t *stackway = malloc(sizeof(stacktogo_t));
-    add_element_to_stack(stackv, nb, nb);
     srand((unsigned) time(&t));
     int end = 0;
     while (1) {
