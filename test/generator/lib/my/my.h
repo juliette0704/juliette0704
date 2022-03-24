@@ -21,5 +21,6 @@ void my_putchar(char c);
 int my_put_nbr(int nb);
 int my_getnbr(char const *str);
 char *my_int_to_str(int digits);
+int char_to_int(char *str);
 
 #endif /* MY_H_ */

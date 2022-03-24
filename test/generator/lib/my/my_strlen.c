@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2021
-** my_strlen
+** my_strlen.c
 ** File description:
 ** task03
 */

@@ -37,12 +37,12 @@ typedef struct stacktogo
     struct elmtogo *first;
 } stacktogo_t;
 
-typedef struct visited
-{
-    int x;
-    int y;
-    struct visited *next;
-} visited_t;
+// typedef struct visited
+// {
+//     int x;
+//     int y;
+//     struct visited *next;
+// } visited_t;
 
 typedef struct stackv
 {
@@ -52,5 +52,5 @@ typedef struct stackv
 struct nb *unstack(struct stacktogo *stackToDepile);
 struct stacktogo *reverse_stack(struct stacktogo *stacktoreverse);
 void add_element_to_stack(stacktogo_t *thestack, struct nb *newx, struct nb *newy);
-void init_maze(int x, int y);
+void init_maze(int x, int y, int ac);
 int check_errors(int x, int y);

@@ -13,6 +13,7 @@ SRC	=	my_getnbr.c	\
 		my_putstr.c	\
         my_strlen.c	\
         my_int_to_str.c	\
+		char_to_int.c    \
 
 OBJ	=	$(SRC:.c=.o)
 

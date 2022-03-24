@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2021
-** my_putstr
+** my_putstr.c
 ** File description:
 ** task02
 */

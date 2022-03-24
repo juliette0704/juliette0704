@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2021
-** my_putchar
+** my_putchar.c
 ** File description:
 ** day07
 */

@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2021
-** get_nbr
+** my_getnbr.c
 ** File description:
 ** task01
 */

@@ -1,21 +1,37 @@
 /*
 ** EPITECH PROJECT, 2022
-** antman.h
+** solver.h
 ** File description:
-** antman
+** solver
 */
 
-#ifndef ANTMAN_H_
-    #define ANTMAN_H_
+typedef struct nb
+{
+    int x;
+    int y;
+} nb_t;
 
-    #include <stdlib.h>
-    #include <stdio.h>
-    #include <sys/stat.h>
-    #include <unistd.h>
-    #include <fcntl.h>
+typedef struct elmtogo
+{
+    int x;
+    int y;
+    struct elmtogo *next;
+} elmtogo_t;
 
-void my_putcstr(char *str);
-void pair(char *str);
-void impair(char *str);
+typedef struct maze
+{
+    char **maze;
+    int x;
+    int y;
+} maze_t;
 
-#endif /* ANTMAN_H_ */
+typedef struct stacktogo
+{
+    struct elmtogo *first;
+} stacktogo_t;
+
+char **str_to_word_array(char *chaine);
+nb_t *unstack(struct stacktogo *stackToDepile);
+int unstacke(struct stacktogo *stackToDepile);
+struct stacktogo *reverse_stack(struct stacktogo *stacktoreverse);
+void add_element_to_stack(stacktogo_t *thestack, nb_t *newx, nb_t *newy);

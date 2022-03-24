@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2021
-** my_itoa
+** my_int_to_str.c
 ** File description:
 ** bistro
 */

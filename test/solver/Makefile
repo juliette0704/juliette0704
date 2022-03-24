@@ -6,6 +6,8 @@
 ##
 
 SRC	=	src/main.c	   \
+		src/edit_stack.c    \
+		src/str_to_word_array.c    \
 
 OBJ	=	$(SRC:.c=.o)
 
