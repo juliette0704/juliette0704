@@ -26,7 +26,7 @@ void init_poster(global_t *m)
         sfSprite_scale(m->panel[0].sprite, (sfVector2f){10, 10});
         sfSprite_setPosition(m->panel[i].sprite, pos);
     }
-    init_text((sfVector2f){600, 500}, "hello", m->panel[0].text);
+    init_text((sfVector2f){600, 500}, "For sale", m->panel[0].text);
     return;
 }
 

@@ -15,8 +15,10 @@ void inventory_react(global_t *global)
         pos.y = global->inventory[0].pos_quit.y - 10;
         sfSprite_setPosition(global->inventory[0].quit, pos);
         sfMouseButton click = sfMouseLeft;
-        if (sfMouse_isButtonPressed(click))
+        if (sfMouse_isButtonPressed(click)) {
             global->inventory[0].is_open = 0;
+            global->potion[0].is_open = 0;
+        }
     } else
         sfSprite_setPosition(global->inventory[0].quit,
     global->inventory[0].pos_quit);
@@ -44,6 +46,10 @@ void draw_inventory(global_t *global)
                 sfSprite_setPosition(global->inventory[0].sword, temp);
                 sfRenderWindow_drawSprite(global->window, global->inventory[0].sword, NULL);
             }
+        }
+        for (int i = 0; i < 2; i++) {
+            if (global->potion[i].is_pot == 1)
+                sfRenderWindow_drawSprite(global->window, global->potion[i].sprite, NULL);
         }
         sfRenderWindow_drawSprite(global->window, global->cursor.sprite, NULL);
         if (sfKeyboard_isKeyPressed(escape) && global->inventory[0].is_open == 1)

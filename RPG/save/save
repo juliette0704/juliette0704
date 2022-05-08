@@ -1,1 +1,4 @@
-life=0
+0 #life player for start 0 to 9
+-4 #scene in game 
+2 #life slime for difficulty
+100 #life boss final

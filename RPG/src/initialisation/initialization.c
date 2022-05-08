@@ -28,10 +28,13 @@ void init_inventory(global_t *global)
     global->inventory[0].gold_s = make_sprite("sprite/inventory/gold_s.png");
     global->inventory[0].sword = make_sprite("sprite/inventory/sword.png");
     global->inventory[0].sprite = make_sprite("sprite/inventory/inventory.png");
+    global->inventory[1].sprite = make_sprite("sprite/potion/potion_inventory.png");
     global->inventory[0].quit = make_sprite("sprite/inventory/quit.png");
-    sfSprite_setPosition(global->inventory[0].sprite, pos);
+    for (int i = 0; i < 2; i++) {
+        sfSprite_setPosition(global->inventory[i].sprite, pos);
+        sfSprite_setScale(global->inventory[i].sprite, scale);
+    }
     sfSprite_setPosition(global->inventory[0].quit, pos_quit);
-    sfSprite_setScale(global->inventory[0].sprite, scale);
     sfSprite_setScale(global->inventory[0].quit, scale);
     sfSprite_setPosition(global->inventory[0].ball, pos_ball);
     sfSprite_setScale(global->inventory[0].ball, scale_ball);
@@ -72,9 +75,11 @@ void init_talk_to_png(global_t *global)
     global->speak[0].sprite_button = make_sprite("sprite/speak/space.png");
     global->speak[0].sprite = make_sprite("sprite/speak/speak_rect.png");
     global->speak[0].hero = make_sprite("sprite/speak/speak_hero.png");
+    global->speak[0].text = make_text(0, 0, 40, sfWhite);
     sfVector2f pos_rect = {0, -50};
     sfVector2f pos_button = {390 * 2.3, 160 * 2.3};
     global->speak[0].check_pos = 0;
+    global->speak[1].check_pos = 0;
     global->speak[0].pos_button = pos_button;
     sfSprite_setPosition(global->speak[0].sprite, pos_rect);
     sfSprite_setPosition(global->speak[0].sprite_button, pos_button);
@@ -93,13 +98,17 @@ void init_png_crest(global_t *global)
     sfVector2f scale = {2.3, 2.3};
     sfVector2f pos = {1725 * 2.3, 675 * 2.3};
     sfVector2f pos_m = {1000, -100};
+    sfVector2f pos_p = {1100, 100};
     global->png_crest[0].pos = pos;
     global->png_crest[1].pos = pos_m;
+    global->png_crest[2].pos = pos_p;
     global->png_crest[0].sprite = make_sprite("sprite/png/png_crest_idle.png");
     global->png_crest[1].sprite = make_sprite("sprite/png/mom.png");
+    global->png_crest[2].sprite = make_sprite("sprite/potion/potion_png.png");
     sfSprite_setPosition(global->png_crest[0].sprite, pos);
     sfSprite_setPosition(global->png_crest[1].sprite, pos_m);
-    for (int i = 0; i < 2; i++) {
+    sfSprite_setPosition(global->png_crest[2].sprite, pos_m);
+    for (int i = 0; i < 3; i++) {
         sfSprite_setTextureRect(global->png_crest[i].sprite, rect);
         sfSprite_setScale(global->png_crest[i].sprite, scale);
     }
@@ -108,7 +117,7 @@ void init_png_crest(global_t *global)
 
 void init_hero(global_t *global)
 {
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
         global->hero[i].check_mouv = 0;
         global->hero[i].check_idle = 0;
         global->hero[i].check_attack = 0;
@@ -120,6 +129,7 @@ void init_hero(global_t *global)
         global->hero[i].right = 0;
         global->hero[i].speed = 0;
     }
+    global->hero[0].damage = 1;
     global->hero[0].sprite = make_sprite("sprite/hero/idle_down.png");
     global->hero[1].sprite = make_sprite("sprite/hero/idle_up.png");
     global->hero[2].sprite = make_sprite("sprite/hero/idle_left.png");
@@ -132,7 +142,6 @@ void init_hero(global_t *global)
     global->hero[9].sprite = make_sprite("sprite/hero/attack_up.png");
     global->hero[10].sprite = make_sprite("sprite/hero/attack_left.png");
     global->hero[11].sprite = make_sprite("sprite/hero/attack_right.png");
-
     sfIntRect rect = {0, 0, 48, 48};
     sfIntRect rect_attack = {0, 0, 144, 144};
     global->hero[0].rect = rect;
@@ -141,8 +150,6 @@ void init_hero(global_t *global)
     sfVector2f pos = {960, 540};
     sfVector2f pos_attack = {850, 430};
     global->house[2].is_open = 0;
-
-
     //sfVector2f pos = {0, 0};
     for (int i = 0; i < 8; i++) {
         sfSprite_setTextureRect(global->hero[i].sprite, rect);
@@ -219,24 +226,39 @@ void init_map(global_t *global)
     global->map[0].my_view = m_view;
     global->map[1].my_view = m_view;
     global->map[2].my_view = i_view;
+    global->map[3].my_view = m_view;
+    global->map[4].my_view = m_view;
     char *map = open_map("parsing/start_map");
     char *map_d = open_map("parsing/dungeon");
     char *map_i = open_map("parsing/island");
+    char *map_a = open_map("parsing/arena");
     global->map[0].sprite = make_sprite("sprite/map/map.png");
+    global->map[0].good_job = make_sprite("sprite/map/good_job.png");
+    global->map[4].sprite = make_sprite("sprite/map/map_boss.png");
+    global->map[3].sprite = make_sprite("sprite/map/arena.png");
     global->map[1].sprite = make_sprite("sprite/map/dungeon.png");
     global->map[0].back = make_sprite("sprite/map/front.png");
     init_front_map(global, "sprite/map/dungeon_back.png");
     global->map[0].front = make_sprite("sprite/map/back.png");
+    global->map[3].front = make_sprite("sprite/map/dungeon_back.png");
+    global->map[4].front = make_sprite("sprite/map/dungeon_back.png");
+    global->map[4].pos_front = pos_front;
+    global->map[3].pos_front = pos_front;
+    global->map[2].pos_front = pos_front;
     global->map[2].pos_front = pos_front_isl;
     global->map[1].pos_front = pos_front;
     global->map[0].pos_front = pos_front;
     sfSprite_setScale(global->map[0].front, scale_2);
+    sfSprite_setScale(global->map[3].front, scale_2);
+    sfSprite_setScale(global->map[4].front, scale_2);
     sfSprite_setScale(global->map[0].back, scale_2);
     sfSprite_setPosition(global->map[0].front, global->map[0].pos_front);
     sfSprite_setPosition(global->map[0].back, global->map[0].pos_front);
     global->map[0].map_txt = my_str_to_word_array(map, '\n');
     global->map[1].map_txt = my_str_to_word_array(map_d, '\n');
     global->map[2].map_txt = my_str_to_word_array(map_i, '\n');
+    global->map[3].map_txt = my_str_to_word_array(map_a, '\n');
+    global->map[4].map_txt = my_str_to_word_array(map_a, '\n');
     int cont_m = 220 * 2.3;
     for (int i = 0; global->map[0].map_txt[i] != NULL; i++) {
         sfVector2f pos = {450 * 2.3, cont_m};
@@ -248,10 +270,12 @@ void init_map(global_t *global)
     int cont = 0;
     sfSprite_setScale(global->map[0].sprite, scale);
     sfSprite_setScale(global->map[1].sprite, scale);
+    sfSprite_setScale(global->map[3].sprite, scale);
+    sfSprite_setScale(global->map[4].sprite, scale);
     return;
 }
 
-void initialization(void)
+int initialization(void)
 {
     global_t *global = malloc(sizeof(global_t));
     sfVideoMode mode = {1920, 1080, 32};
@@ -259,9 +283,17 @@ void initialization(void)
     sfResize | sfClose, NULL);
     global->scene = 4;
     global->tuto = 0;
+    global->my_exit = 0;
+    global->attack = 0;
+    global->nb_slime = 5;
+    global->history_place = 0;
+    global->apt = 0;
     file_to_struct(global);
+    init_quest(global);
     init_minispace(global);
+    init_laby_door(global);
     init_bubble(global);
+    init_light(global);
     init_mentor(global);
     init_island(global);
     init_toucht(global);
@@ -283,6 +315,19 @@ void initialization(void)
     init_hitbox_attack(global);
     init_intro(global);
     init_cursor(global);
-    start_game(global);
-    return;
+    init_game_over(global);
+    init_pause(global);
+    init_end_game(global);
+    init_shield(global);
+    init_slime_boss(global);
+    init_potion(global);
+    file_to_struct(global);
+    init_fire_particle(global);
+    init_boss_door(global);
+    init(global);
+    if (start_game(global) == 1)
+        return 1;
+    return 0;
+    // start_game(global);
+    // return;
 }

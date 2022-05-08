@@ -38,9 +38,34 @@ SRC	=	src/main.c	\
 		src/draw/draw_intro.c	\
 		src/launch/tutorial.c    \
 		src/launch/island.c    \
+		src/animation/shield.c    \
+		src/game_over/game_over.c	\
+		src/draw/draw_pause.c	\
+		src/end_game/end_game.c	\
+		src/draw/draw_arena.c	\
+		src/ennemis/boss_slime.c	\
 		src/draw/draw_mentor.c    \
 		src/initialisation/init_bubble_speak.c    \
 		src/draw/draw_minispace.c    \
+		src/initialisation/init_light.c    \
+		src/potion/potion.c	\
+		src/draw/draw_final.c	\
+		src/initialisation/init_laby_door.c    \
+		src/editing_buttons/init_buttons.c		\
+		src/font_map/init_font_map.c		\
+		src/font_map/init_special.c		\
+		src/display_draw/draw.c		\
+		src/launch_menu/init.c		\
+		src/event/event_buttons.c		\
+		src/event/event_menu.c		\
+		src/display_draw/buttons_draw.c		\
+		src/font_map/simple_font.c			\
+		src/display_draw/condition.c		\
+		src/font_map/title.c			\
+		src/animation/boss_door.c	\
+		src/game_over/draw_end_game.c	\
+		src/particle/fire_particle.c	\
+		src/initialisation/init_quest.c    \
 
 OBJ	=	$(SRC:.c=.o)
 

@@ -24,7 +24,7 @@ void init_intro(global_t *global)
 
 void draw_intro(global_t *global)
 {
-    sfColor color = sfSprite_getColor(global->intro[0].sprite); //0 255
+    sfColor color = sfSprite_getColor(global->intro[0].sprite);
     if (global->intro[0].sec > 0.01) {
         if (global->intro[0].is_done == 0)
             color.a += 1;

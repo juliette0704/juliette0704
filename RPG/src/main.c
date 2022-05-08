@@ -45,7 +45,8 @@ int main(int ac, char **av)
     if (ac == 2 && av[1][0] == '-' && av[1][1] == 'h')
         print_rules();
     else {
-        initialization();
+        if (initialization() == 1)
+            return 0;
     }
     return 0;
 }

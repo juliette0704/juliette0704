@@ -49,12 +49,17 @@ void open_door(sfRenderWindow *window, global_t *global)
             break;
         case 'm' :
             sfRenderWindow_drawSprite(global->window, global->house[0].enter, NULL);
-            if (sfKeyboard_isKeyPressed(enter))
+            if (sfKeyboard_isKeyPressed(enter) && global->history_place == 2)
                 global->house[2].is_open = 1;
             if (global->house[2].is_open == 1) {
                 door_animation(global->door[2].sprite, global->door[2].pos, global, 3);
                 sfRenderWindow_drawSprite(window, global->door[2].sprite, NULL);
             }
+            break;
+        case '3' :
+            sfRenderWindow_drawSprite(window, global->house[0].space, NULL);
+            if (sfKeyboard_isKeyPressed(space) && global->inventory[0].gold_i != 0)
+                global->scene = 5;
             break;
         default :
             break;
@@ -64,21 +69,15 @@ void open_door(sfRenderWindow *window, global_t *global)
 
 void start_map(sfRenderWindow *window, global_t *global)
 {
-    // attack_hit_way(global);
     sfSprite_setPosition(global->map[0].back, global->map[0].pos_front);
     sfSprite_setPosition(global->map[0].front, global->map[0].pos_front);
     deplace_in_map(global->window, global, 0);
     sfSprite_setTextureRect(global->map[0].sprite, global->map[0].my_view);
     sfRenderWindow_drawSprite(window, global->map[0].sprite, NULL);
     sfRenderWindow_drawSprite(window, global->map[0].front, NULL);
-    sfRenderWindow_drawSprite(window, global->enemy[0].sprite, NULL);
     sfRenderWindow_drawSprite(window, global->png_crest[0].sprite, NULL);
     sfRenderWindow_drawSprite(window, global->hero[global->hero[0].check_mouv].sprite, NULL);
     sfRenderWindow_drawSprite(window, global->map[0].back, NULL);
-    //printf("pos x slime %d\n", global->enemy[0].pos_x);
-    test_hitbox(global);
-    //for (int i = 0; i < 4; i++)
-        //sfRenderWindow_drawSprite(window, global->hit_attack[0].sprite, NULL);
     open_door(window, global);
     draw(global->window, global);
     return;

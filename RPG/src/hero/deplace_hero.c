@@ -11,7 +11,8 @@ void down_map(global_t *global)
 {
     global->png_crest[0].pos.y -= 4 * global->hero[0].speed;
     global->enemy[0].pos.y -= 4 * global->hero[0].speed;
-
+    global->fire[0].pos.y -= 4 * global->hero[0].speed;
+    global->quest[0].pos.y -= 4 * global->hero[0].speed;
     if (global->box[0].take != 1) {
         global->box[0].pos.y -= 4 * global->hero[0].speed;
         sfSprite_setPosition(global->box[0].sprite, global->box[0].pos);
@@ -31,12 +32,25 @@ void deplace_down(global_t *global, int j)
     global->hero[0].check_mouv = 4;
     global->hero[j].down += 1 * global->hero[0].speed;
     global->map[j].pos_front.y -= 4 * global->hero[0].speed;
-    global->mentor[0].pos.y -= 4 * global->hero[0].speed;
-
     if (j == 0)
         down_map(global);
-    if (j == 1)
+    if (j == 1) {
+        global->labydoor[1].pos.y -= 4 * global->hero[0].speed;
         global->inventory[0].pos_gold.y -= 4 * global->hero[0].speed;
+        global->box[0].pos.y -= 4 * global->hero[0].speed;
+        global->labydoor[0].pos.y -= 4 * global->hero[0].speed;
+    }
+    if (j == 3) {
+        for (int k = 0; k < global->nb_slime; k++) {
+            global->enemy[k].pos.y -= 4 * global->hero[0].speed;
+        }
+    }
+    if (j == 2) {
+        global->mentor[0].pos.y -= 4 * global->hero[0].speed;
+    }
+    if (j == 4) {
+        global->boss.pos.y -= 4 * global->hero[0].speed;
+    }
     // for (int k = 0; k < 4; k++)
     //     global->hit_attack[k].rect.top += 4 * global->hero[0].speed;
     // for (int i = 0; global->map[j].map_txt[i] != NULL; i++) {
@@ -50,7 +64,8 @@ void up_map(global_t *global)
 {
     global->png_crest[0].pos.y += 4 * global->hero[0].speed;
     global->enemy[0].pos.y += 4 * global->hero[0].speed;
-
+    global->fire[0].pos.y += 4 * global->hero[0].speed;
+    global->quest[0].pos.y += 4 * global->hero[0].speed;
     if (global->box[0].take != 4) {
         global->box[0].pos.y += 4 * global->hero[0].speed;
         sfSprite_setPosition(global->box[0].sprite, global->box[0].pos);
@@ -70,11 +85,25 @@ void deplace_up(global_t *global, int i)
     global->hero[0].check_mouv = 5;
     global->hero[i].up += 1 * global->hero[0].speed;
     global->map[i].pos_front.y += 4 * global->hero[0].speed;
-    global->mentor[0].pos.y += 4 * global->hero[0].speed;
     if (i == 0)
         up_map(global);
-    if (i == 1)
+    if (i == 1) {
+        global->labydoor[1].pos.y += 4 * global->hero[0].speed;
         global->inventory[0].pos_gold.y += 4 * global->hero[0].speed;
+        global->box[0].pos.y += 4 * global->hero[0].speed;
+        global->labydoor[0].pos.y += 4 * global->hero[0].speed;
+    }
+    if (i == 3) {
+        for (int k = 0; k < global->nb_slime; k++) {
+            global->enemy[k].pos.y += 4 * global->hero[0].speed;
+        }
+    }
+    if (i == 2) {
+        global->mentor[0].pos.y += 4 * global->hero[0].speed;
+    }
+    if (i == 4) {
+        global->boss.pos.y += 4 * global->hero[0].speed;
+    }
     // for (int k = 0; k < 4; k++)
     //     global->hit_attack[k].rect.top -= 4 * global->hero[0].speed;
     // for (int j = 0; global->map[i].map_txt[j] != NULL; j++) {
@@ -88,7 +117,8 @@ void left_map(global_t *global)
 {
     global->png_crest[0].pos.x += 4 * global->hero[0].speed;
     global->enemy[0].pos.x += 4 * global->hero[0].speed;
-
+    global->fire[0].pos.x += 4 * global->hero[0].speed;
+    global->quest[0].pos.x += 4 * global->hero[0].speed;
     if (global->box[0].take != 2) {
         global->box[0].pos.x += 4 * global->hero[0].speed;
         sfSprite_setPosition(global->box[0].sprite, global->box[0].pos);
@@ -108,11 +138,25 @@ void deplace_left(global_t *global, int i)
     global->hero[0].check_mouv = 6;
     global->hero[i].left += 1 * global->hero[0].speed;
     global->map[i].pos_front.x += 4 * global->hero[0].speed;
-    global->mentor[0].pos.x += 4 * global->hero[0].speed;
     if (i == 0)
         left_map(global);
-    if (i == 1)
+    if (i == 1) {
+        global->labydoor[1].pos.x += 4 * global->hero[0].speed;
         global->inventory[0].pos_gold.x += 4 * global->hero[0].speed;
+        global->box[0].pos.x += 4 * global->hero[0].speed;
+        global->labydoor[0].pos.x += 4 * global->hero[0].speed;
+    }
+    if (i == 3) {
+        for (int k = 0; k < global->nb_slime; k++) {
+            global->enemy[k].pos.x += 4 * global->hero[0].speed;
+        }
+    }
+    if (i == 2) {
+        global->mentor[0].pos.x += 4 * global->hero[0].speed;
+    }
+    if (i == 4) {
+        global->boss.pos.x += 4 * global->hero[0].speed;
+    }
     // for (int k = 0; k < 4; k++)
     //     global->hit_attack[k].rect.left -= 4 * global->hero[0].speed;
     // for (int j = 0; global->map[i].map_txt[i] != NULL; j++) {
@@ -125,12 +169,13 @@ void deplace_left(global_t *global, int i)
 void right_map(global_t *global)
 {
     global->png_crest[0].pos.x -= 4 * global->hero[0].speed;
-
+    global->enemy[0].pos.x -= 4 * global->hero[0].speed;
+    global->fire[0].pos.x -= 4 * global->hero[0].speed;
+    global->quest[0].pos.x -= 4 * global->hero[0].speed;
     if (global->box[0].take != 3) {
         global->box[0].pos.x -= 4 * global->hero[0].speed;
         sfSprite_setPosition(global->box[0].sprite, global->box[0].pos);
     }
-
     global->enemy[0].pos.x -= 4 * global->hero[0].speed;
     global->speak[0].pos_button.x -= 4 * global->hero[0].speed;
     for (int i = 0; i < 3; i++) {
@@ -145,14 +190,27 @@ void deplace_right(global_t *global, int i)
     global->hero[0].check_mouv = 7;
     global->hero[i].right += 1 * global->hero[0].speed;
     global->map[i].pos_front.x -= 4 * global->hero[0].speed;
-
-    global->mentor[0].pos.x -= 4 * global->hero[0].speed;
     // for (int k = 0; k < 4; k++)
     //     global->hit_attack[k].rect.left += 4 * global->hero[0].speed;
     if (i == 0)
         right_map(global);
-    if (i == 1)
+    if (i == 1) {
+        global->labydoor[1].pos.x -= 4 * global->hero[0].speed;
         global->inventory[0].pos_gold.x -= 4 * global->hero[0].speed;
+        global->box[0].pos.x -= 4 * global->hero[0].speed;
+        global->labydoor[0].pos.x -= 4 * global->hero[0].speed;
+    }
+    if (i == 3) {
+        for (int k = 0; k < global->nb_slime; k++) {
+            global->enemy[k].pos.x -= 4 * global->hero[0].speed;
+        }
+    }
+    if (i == 2) {
+        global->mentor[0].pos.x -= 4 * global->hero[0].speed;
+    }
+    if (i == 4) {
+        global->boss.pos.x -= 4 * global->hero[0].speed;
+    }
     return;
 }
 
@@ -205,11 +263,8 @@ void deplace_in_map(sfRenderWindow *window, global_t *global, int i)
     if (global->hero[0].check_attack == 1) {
         global->hero[0].check_mouv = global->hero[0].check_idle + 8;
         attack(window, global, global->hero[0].check_mouv);
-        check_hit_slime(global);
-        // attack_hit_way(global);
         global->hero[0].check_idle = global->hero[0].check_mouv - 8;
     }
-    // } else if (global->hero[0].check_mouv >= 0 && global->hero[0].check_mouv < 4)
     if (global->hero[0].check_mouv >= 0 && global->hero[0].check_mouv < 4)
         move(window, global, global->hero[0].check_idle);
     else if (global->hero[0].check_mouv >= 4 && global->hero[0].check_mouv < 8) {
@@ -226,6 +281,6 @@ void deplace_in_map(sfRenderWindow *window, global_t *global, int i)
     sfSprite_setPosition(global->png_crest[0].sprite, global->png_crest[0].pos);
     sfSprite_setPosition(global->map[i].front, global->map[i].pos_front);
     move_png_crest(window, global, 0);
-    animation_slime(global);
+    animation_shield(global);
     return;
 }

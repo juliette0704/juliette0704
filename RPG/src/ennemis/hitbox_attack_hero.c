@@ -9,7 +9,7 @@
 
 void init_hitbox_attack(global_t *global)
 {
-    sfIntRect rect[] = {{890, 650, 250, 150}, {890, 390, 250, 150}, {810, 475, 150, 250}, {1075, 475, 150, 250}, {960, 540, 115, 110}};
+    sfIntRect rect[] = {{890, 650, 250, 200}, {890, 340, 250, 200}, {760, 475, 200, 250}, {1075, 475, 200, 250}, {960, 540, 115, 110}};
     sfVector2f pos[] = {{rect[0].left, rect[0].top}, {rect[1].left, rect[1].top}, {rect[2].left, rect[2].top}, {rect[3].left, rect[3].top}, {rect[4].left, rect[4].top}};
     global->hit_attack[4].sprite = make_sprite("sprite/hero/my_hit.png");
     global->hit_attack[4].rect = rect[4];
@@ -25,38 +25,30 @@ void init_hitbox_attack(global_t *global)
     global->hit_attack[4].rect = rect[4];
 }
 
-void check_hit_slime(global_t *global)
-{
-    sfIntRect hit_range = {0, 0, 24, 24};
-    if (sfIntRect_intersects(&global->enemy[0].rect, &global->hit_attack[global->hero[0].check_mouv - 8].rect, &hit_range))
-        global->enemy[0].stage = 3;
-}
-
-void slime_pushed_back(global_t *global, int i)
+void slime_pushed_back(global_t *global, int i, int k)
 {
     switch (i) {
     case 0:
-        global->enemy[0].pos.y += 100;
+        global->enemy[k].pos.y += 300;
         break;
     case 1:
-        global->enemy[0].pos.y -= 100;
+        global->enemy[k].pos.y -= 300;
         break;
     case 2: 
-        global->enemy[0].pos.x -= 100;
+        global->enemy[k].pos.x -= 300;
         break;
     case 3:
-        global->enemy[0].pos.x += 100;
+        global->enemy[k].pos.x += 300;
         break;
     default:
         break;
     }
 }
 
-// void slime_pushed_back(global_t *global)
+// void slime_pushed_back(global_t *global, int i)
 // {
 //     switch (global->hero[0].check_mouv - 8) {
 //     case 0:
-//         printf("enter");
 //         global->enemy[0].pos.y += 20;
 //         break;
 //     case 1:
@@ -73,35 +65,57 @@ void slime_pushed_back(global_t *global, int i)
 //     }
 // }
 
-void test_hitbox(global_t *global)
+void check_hit_slime(global_t *global)
 {
-    // if (sfIntRect_contains(&global->hit_attack[0].rect, global->cursor.pos.x, global->cursor.pos.y))
-    //     printf("hitbox_down\n");
-    // if (sfIntRect_contains(&global->hit_attack[1].rect, global->cursor.pos.x, global->cursor.pos.y))
-    //     printf("hitbox_up\n");
-    // if (sfIntRect_contains(&global->hit_attack[2].rect, global->cursor.pos.x, global->cursor.pos.y))
-    //     printf("hitbox_left\n");
-    // if (sfIntRect_contains(&global->hit_attack[3].rect, global->cursor.pos.x, global->cursor.pos.y))
-    //     printf("hitbox_right\n");
-    // if (sfIntRect_contains(&global->enemy[0].rect, global->cursor.pos.x, global->cursor.pos.y))
-    //     printf("enemy\n");
-    //for (int i = 0; i < 4; i++) {
-    sfMouseButton a = sfKeyA;
     for (int i = 0; i < 4; i++) {
-        sfRenderWindow_drawSprite(global->window, global->hit_attack[i].sprite, NULL);
-        if (sfIntRect_contains(&global->hit_attack[i].rect,  global->enemy[0].pos.x,  global->enemy[0].pos.y) && sfKeyboard_isKeyPressed(a)) {
-            if (global->hero[0].check_mouv == i || global->hero[0].check_mouv == (i + 4)) {
-                slime_pushed_back(global, i);
-                slime_hit(global);
-                sfRenderWindow_drawSprite(global->window, global->hit_attack[i].sprite, NULL);
+        //sfRenderWindow_drawSprite(global->window, global->hit_attack[i].sprite, NULL);
+        for (int k = 0; k < global->nb_slime; k++) {
+            if (sfIntRect_contains(&global->hit_attack[i].rect, global->enemy[k].pos.x,  global->enemy[k].pos.y)) {
+                if (global->attack == 1) {
+                    if (global->hero[0].check_mouv == (i + 8) || global->hero[0].check_mouv == (i + 12)) {
+                        slime_pushed_back(global, i, k);
+                        sfSprite_setPosition(global->enemy[k].sprite, global->enemy[k].pos);
+                        global->enemy[k].life -= global->hero[0].damage;
+                    }
+                }
             }
         }
     }
-    sfRenderWindow_drawSprite(global->window, global->hit_attack[4].sprite, NULL);
-    if (sfIntRect_contains(&global->hit_attack[4].rect,  global->enemy[0].pos.x,  global->enemy[0].pos.y)) {
-        if (global->life[0].life < 9) {
-            slime_pushed_back(global, rand() % 4);
-            global->life[0].life++;
+    global->attack = 0;
+    for (int k = 0; k < global->nb_slime; k++) {
+        if (sfIntRect_contains(&global->hit_attack[4].rect,  global->enemy[k].pos.x,  global->enemy[k].pos.y)) {
+            if (global->life[0].life < 9) {
+                slime_pushed_back(global, rand() % 4, k);
+                if (global->enemy[k].life > 0 && global->shield[0].active == 0 && global->enemy[0].damage == 1)
+                    global->life[0].life += global->enemy[1].damage;
+            }
+            if (global->life[0].life >= 9)
+                global->scene = -2;
         }
+    }
+}
+
+void check_hit_slime_boss(global_t *global)
+{
+    for (int i = 0; i < 4; i++) {
+        sfRenderWindow_drawSprite(global->window, global->hit_attack[i].sprite, NULL);
+        if (sfIntRect_contains(&global->hit_attack[i].rect, global->boss.pos.x, global->boss.pos.y)) {
+            if (global->attack == 1) {
+                if (global->hero[0].check_mouv == (i + 8) || global->hero[0].check_mouv == (i + 12)) {
+                    global->boss.stage = 3;
+                    global->boss.life -= global->hero[0].damage;
+                }
+            }
+        }
+    }
+    global->attack = 0;
+    if (global->boss.stage == 2) {
+        // printf("attack\n");
+        if (sfIntRect_contains(&global->hit_attack[4].rect, global->boss.pos.x - (50 * global->boss.scale.x), global->boss.pos.y - (24 * global->boss.scale.y)) && global->boss.rotate == 1)
+            // printf("attack_left hit\n");
+            global->life[0].life += global->boss.damage;
+        if (sfIntRect_contains(&global->hit_attack[4].rect, global->boss.pos.x + 50, global->boss.pos.y - 24) && global->boss.rotate == 0)
+            // printf("attack_right hit\n");
+            global->life[0].life += global->boss.damage;
     }
 }

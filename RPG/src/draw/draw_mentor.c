@@ -37,7 +37,7 @@ void anim_mentor(global_t *g)
             init_rect_mentor(g);
             sfClock_restart(g->mentor[0].clock);
             if (g->mentor[0].speedmentor >= 140)
-                    g->mentor[0].speedmentor = 0;
+                g->mentor[0].speedmentor = 0;
             else
                 g->mentor[0].speedmentor += 48;
     }
