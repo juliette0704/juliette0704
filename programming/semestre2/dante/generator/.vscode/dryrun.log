@@ -1,0 +1,12 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/home/juliettee/delivery/Programming/2/B-CPE-200-NCE-2-1-dante-clement.dupouy-paulin/generator'
+make -C lib/my all
+cc -g3 -I ./include/   -c -o src/main.o src/main.c
+cc -g3 -I ./include/   -c -o src/edit_stack.o src/edit_stack.c
+cc -g3 -I ./include/   -c -o src/check_neigbourh.o src/check_neigbourh.c
+cc -g3 -I ./include/   -c -o src/tools_for_maze.o src/tools_for_maze.c
+cc -g3 -I ./include/   -c -o src/imperfect.o src/imperfect.c
+cc -g3 -I ./include/   -c -o src/check_maze.o src/check_maze.c
+gcc -g -o generator src/main.o src/edit_stack.o src/check_neigbourh.o src/tools_for_maze.o src/imperfect.o src/check_maze.o -L ./lib -lmy
+make: Leaving directory '/home/juliettee/delivery/Programming/2/B-CPE-200-NCE-2-1-dante-clement.dupouy-paulin/generator'
+ 

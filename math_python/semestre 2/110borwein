@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+
+from operator import delitem
+from operator import delitem
+from unicodedata import decimal
+from math import *
+import sys
+
+from numpy import compare_chararrays, full
+
+if (len(sys.argv) > 2):
+    exit (84)
+
+try :
+    av = int(sys.argv[1])
+except :
+    exit (84)
+
+if (av < 0) :
+    exit (84)
+
+def borwein(x, n) :
+    if x == 0:
+        return (1)
+
+    res = 1.0
+
+    for i in range(n + 1) :
+        res = res * (sin(x / (2 * i + 1)) / (x / (2 * i + 1)))
+    return (res)
+
+def trapeze() :
+    a = 0
+    b = 5000
+    res = 0
+    n2 = 10000
+    diff = 0
+    h = (b-a) / n2
+    for i in range(1, n2) :
+        res += borwein(a + i * h, av)
+    res = res * 2 + borwein(b, av) + borwein(a, av)
+    res = res * (b-a) / (2*n2)
+    print("Trapezoidal:")
+    print ("I" + str(av), '=', '%.10f' %(res))
+    diff = pi /2 - res
+    print ('diff = %.10f\n' %(diff))
+    
+def main() :
+    midpoint()
+    trapeze()
+    simpson()
+
+def midpoint() :
+    a = 0
+    b = 5000
+    res = 0
+    n2 = 10000
+    h = (b - a ) / n2
+    for i in range(0, n2) :
+        res += borwein(a + i * h + (h/2), av)
+    res *= h
+    diff = pi /2 - res
+    print("Midpoint:")
+    print("I" + str(av), '=', '%.10f' %(res))
+    print ('diff = %.10f\n' %(diff))
+
+def simpson() :
+    a = 0
+    b = 5000
+    res = 0
+    res2 = 0
+    n2 = 10000
+    resbg = 0
+    h = (b - a ) / n2
+    for i in range(0, n2) :
+        res += borwein(a + i * h + + (h/2), av)
+    res *= 4
+    for clem in range(1, n2) :
+        res2 += borwein(a + clem * h, av)
+    res2 *= 2
+    resbg = res + res2 + borwein(a, av) + borwein(b, av)
+    resbg *= (b - a )/ (6*n2)
+    print("Simpson:")
+    print ("I" + str(av), '=', '%.10f' %(resbg))
+    diff = pi /2 - resbg
+    print ('diff = %.10f' %(diff))
+
+main()

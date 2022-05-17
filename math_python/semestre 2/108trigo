@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+
+from math import *
+import sys
+
+def creat_matrix(nb) :
+    matrix = []
+
+def fonction_cos(nb) :
+
+    creat_matrix(nb)
+
+def fonction_exp(nb) :
+    try :
+        x1, x2, x3, x4 = int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]),int(sys.argv[5])
+    except :
+        exit(84)
+
+def fonction_sinh(nb) :
+    try :
+        x1, x2, x3, x4 = int(sys.argv[2]), int(sys.argv[3]), int(sys.argv[4]),int(sys.argv[5])
+    except :
+        exit(84)
+
+def main():
+    matrix = [0]
+    if len(sys.argv) == 2:
+        if (sys.argv[1] == "-h"):
+            print("USAGE\n\t./108trigo fun a0 a1 a2 ...\n")
+            print("DESCRIPTION")
+            print("\tfun\t\tfunction to b applied, among at least \"EXP\", \"COS\", \"SIN\", \"COSH\" and \"SINH\"")
+            print("\tai\t\tcoeficients of the matrix")
+            exit(0)
+        else :
+            exit(84)
+    if (len(sys.argv) >= 6) :
+        if (sys.argv[1] == "COS") :
+            nb = (len(sys.argv) - 2)
+            if (nb == 4 or nb == 16 or nb == 9 or nb == 25 or nb == 36 or nb == 49) :
+                fonction_cos(nb)
+            else :
+                exit(84)
+        elif (sys.argv[1] == "EXP") :
+            nb = (len(sys.argv) - 2)
+            if (nb == 4 or nb == 16 or nb == 9 or nb == 25 or nb == 36 or nb == 49) :
+                fonction_exp(nb)
+        elif (sys.argv[1] == "SINH") :
+            nb = (len(sys.argv) - 2)
+            if (nb == 4 or nb == 16 or nb == 9 or nb == 25 or nb == 36 or nb == 49) :
+                fonction_sinh(nb)
+        else :
+            exit(84)
+main()
