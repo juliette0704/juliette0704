@@ -3,11 +3,12 @@ var bcrypt = require('bcrypt');
 const router = express();
 const jwt = require('jsonwebtoken');
 var con = require('../../config/db.js');
+var token = require('../../index');
 const bodyparser = require("body-parser");
 const jsonparser = bodyparser.json();
 require('dotenv').config();
 var email_use = null;
-var token = null;
+// var token = null;
 
 router.post("/todos",jsonparser, (reqe, rese, next) => {
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {

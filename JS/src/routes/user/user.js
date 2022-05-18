@@ -7,12 +7,13 @@ const bodyparser = require("body-parser");
 const jsonparser = bodyparser.json();
 require('dotenv').config();
 var email_use = null;
-var token = null;
+// var token = null;
+var token = require('../../index')(token);
 
 
 router.get("/user",jsonparser, (reqe, rese, next) => {
-    jwt.verify(token,process.env.TOKENSECRET
-        , (err, verifiedJwt) => {
+    jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
+        console.log(token);
         con.query('select * from user', function(error, results, fields) {
             rese.send(results);
         });
@@ -24,7 +25,6 @@ router.get("/user/todo",jsonparser, (reqe, rese, next) => {
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
         con.query('select id from user where email = ?', [email_use], function(error, results, fields) {
             var iduse = results[0];
-            // iduse = iduse['id'];
             con.query('select * from todo where user_id = ?', [iduse], function(error2, results2, fields2) {
                 rese.send(results2);
             });

@@ -7,7 +7,8 @@ const bodyparser = require("body-parser");
 const jsonparser = bodyparser.json();
 require('dotenv').config();
 var email_use = null;
-var token = null;
+// var token = null;
+var token = require('../../index');
 
 
 router.get("/user/:id",jsonparser, (reqe, rese, next) => {
