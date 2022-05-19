@@ -54,7 +54,7 @@ router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
         statuse = reqe.body.status
         user_id = reqe.body.user_id
         due_time = new Date(reqe.body.due_time);
-        created_at = 0
+        created_at = 1
         
         var user={
             "title":title,
@@ -64,10 +64,23 @@ router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
             "user_id":user_id,
             "created_at":new Date()
         }
-        con.query('update todo set = ?, title = ?, description = ?, status = ?, user_id = ?, due_time = ? where id = ?', [user.title, user.description, user.status, user.user_id, user.due_time, middleware], function(error, results, fields) {
-            con.query('select * from todo where id = ?', [middleware], function(error2, results2, fields2) {
-                rese.send(results2);
-            });
+
+        con.query('SELECT * FROM todo WHERE id = ?', [middleware], function(error2, results2, fields) {
+            if (error2) rese.send({"msg":"Internal server error"});
+            else if (results2[0] == undefined) return rese.send({"msg": "Not Found"});
+            else {
+                con.query('update todo set title = ?, description = ?, status = ?, user_id = ?, due_time, ? where id = ?', [user.title, user.description, user.status, user.user_id, user.due_time, middleware], function(error, results, fields) {
+                    // if (error) return rese.send({"msg":"Internal server error"});
+                    // else {
+                        con.query('select * from todo where id = ?', [middleware], function(error2, results2, fields2) {
+                            if (error2) rese.send({"msg": "Internal server error"});
+                            else {
+                                rese.send(results2);
+                            };
+                        });
+                    // };
+                });
+            }
         });
     });
 });
