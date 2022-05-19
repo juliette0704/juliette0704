@@ -60,9 +60,8 @@ router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
             "title":title,
             "description":description,
             "due_time":due_time,
-            "status":statuse,
             "user_id":user_id,
-            "created_at":new Date()
+            "status":statuse,
         }
 
         con.query('SELECT * FROM todo WHERE id = ?', [middleware], function(error2, results2, fields) {
@@ -75,14 +74,14 @@ router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
                         con.query('select * from todo where id = ?', [middleware], function(error2, results2, fields2) {
                             if (error2) rese.send({"msg": "Internal server error"});
                             else {
-                                rese.send(results2);
+                                rese.send(user);
                             };
                         });
                     // };
                 });
-            }
+                }
+            });
         });
-    });
 });
 
 module.exports = router;
