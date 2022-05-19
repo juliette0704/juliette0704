@@ -3,15 +3,18 @@ var bcrypt = require('bcrypt');
 const router = express();
 const jwt = require('jsonwebtoken');
 var con = require('../../config/db.js');
-var token = require('../../index');
 const bodyparser = require("body-parser");
 const jsonparser = bodyparser.json();
 require('dotenv').config();
 var email_use = null;
-// var token = null;
+var token = null;
 
 router.post("/todos",jsonparser, (reqe, rese, next) => {
+    const autheader = reqe.headers['authorization']
+    const token = autheader && autheader.split(' ')[1]
+    if (token == null) return rese.send({"msg": "No token, authorization denied"});
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
+        if (err) return rese.send({" msg ": " Token is not valid "})
         title = reqe.body.title
         description = reqe.body.description
         statuse = reqe.body.status
@@ -41,7 +44,11 @@ router.post("/todos",jsonparser, (reqe, rese, next) => {
 // modify a todo
 router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
     var middleware = reqe.params.id;
+    const autheader = reqe.headers['authorization']
+    const token = autheader && autheader.split(' ')[1]
+    if (token == null) return rese.send({"msg": "No token, authorization denied"});
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
+        if (err) return rese.send({" msg ": " Token is not valid "})
         title = reqe.body.title
         description = reqe.body.description
         statuse = reqe.body.status

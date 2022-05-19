@@ -4,16 +4,19 @@ const router = express();
 const jwt = require('jsonwebtoken');
 var con = require('../../config/db.js');
 const bodyparser = require("body-parser");
+const res = require("express/lib/response");
 const jsonparser = bodyparser.json();
 require('dotenv').config();
 var email_use = null;
-// var token = null;
-var token = require('../../index')(token);
+var token = null;
 
 
 router.get("/user",jsonparser, (reqe, rese, next) => {
+    const autheader = reqe.headers['authorization']
+    const token = autheader && autheader.split(' ')[1]
+    if (token == null) return rese.send({"msg": "No token, authorization denied"});
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
-        console.log(token);
+        if (err) return rese.send({" msg ": " Token is not valid "})
         con.query('select * from user', function(error, results, fields) {
             rese.send(results);
         });
@@ -21,10 +24,16 @@ router.get("/user",jsonparser, (reqe, rese, next) => {
 });
 
 // view all user task
-router.get("/user/todo",jsonparser, (reqe, rese, next) => {
+router.get("/user/todos",jsonparser, (reqe, rese, next) => {
+    const autheader = reqe.headers['authorization']
+    const token = autheader && autheader.split(' ')[1]
+    if (token == null) return rese.send({"msg": "No token, authorization denied"});
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
+        if (err) return rese.send({" msg ": " Token is not valid "})
+        email_use = jwt.decode(token)['email'];
         con.query('select id from user where email = ?', [email_use], function(error, results, fields) {
-            var iduse = results[0];
+            if (error) return rese.send({"msg": "Not found"});
+            var iduse = results[0]['id'];
             con.query('select * from todo where user_id = ?', [iduse], function(error2, results2, fields2) {
                 rese.send(results2);
             });
@@ -34,10 +43,15 @@ router.get("/user/todo",jsonparser, (reqe, rese, next) => {
 
 // delete user
 router.delete("/user/:id", jsonparser,(reqe, rese, next) => {
+    const autheader = reqe.headers['authorization']
+    const token = autheader && autheader.split(' ')[1]
+    if (token == null) return rese.send({"msg": "No token, authorization denied"});
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
+        if (err) return rese.send({" msg ": " Token is not valid "})
         var middleware = reqe.params.id;
         con.query('DELETE FROM user WHERE id = ?', [middleware], function(error, results, fields) {
-                rese.status(200).json;
+            if (error) return rese.send({"msg": "Not found"});
+            rese.status(200).json;
         });
     });
 });
