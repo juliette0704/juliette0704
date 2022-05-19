@@ -22,44 +22,46 @@ router.post("/register", jsonparser,(reqe, rese, next) => {
             "password":bcryptedPassword,
             "name":namee,
             "firstname":firstname,
-            "created_at":new Date()
+            "created_at":new Date
         }
-        con.query('INSERT INTO user SET ?',user);
-    });
-    rese.status(201).json({
-        "firstname": firstname,
-        "name": namee,
-        "created_at": new Date,
-        "password": password,
-        "email": email,
+        con.query('SELECT email FROM user WHERE email = ?',[email], function(error2, results2, fields2) {
+            console.log(results2);
+            if (results2[0] != undefined) return rese.send({"msg": "Account already exists"});
+            else {
+                con.query('INSERT INTO user SET ?',user);
+                token = jwt.sign({email}, process.env.TOKENSECRET, { expiresIn: '1800s' });
+                rese.status(201).json({
+                    "token": token,
+                });
+            }
+        });
     });
 });
 
 // login and create a token
 router.post("/login", jsonparser,(reqe, rese, next) => {
-    // rese.type("application/json");
-    console.log(reqe.body);
     password = reqe.body.password
     email = reqe.body.email
-    console.log(reqe.body.password);
-    console.log(reqe.body.email);
     con.query('SELECT password FROM user WHERE email = ?', [email], function(error, results, fields) {
-        var password_db = results[0];
-        password_db = password_db['password'];
-        bcrypt.compare(password, password_db, function(errBycrypt, resBycrypt) {
-            if (resBycrypt) {
-                email_use = email;
-                token = jwt.sign({email}, "v54bg54gbffbne8GJOIjoihGUUFT65ufto8grejfezo8gerofj", { expiresIn: '1800s' });
-                console.log(token);
-            }
-            rese.status(201).json({
-                "password": password,
-                "email": email,
-                "token": token
+        if (results[0] == undefined) rese.send({"msg": "Invalid Credentials"});
+        else {
+            var password_db = results[0];
+            password_db = password_db['password'];
+            bcrypt.compare(password, password_db, function(errBycrypt, resBycrypt) {
+                if (resBycrypt) {
+                    email_use = email;
+                    token = jwt.sign({email}, process.env.TOKENSECRET, { expiresIn: '1800s' });
+                    console.log({"token": token});
+                    rese.status(201).json({
+                        // "password": password,
+                        // "email": email,
+                        "token": token
+                    });
+                }
+                else rese.send({"msg": "Invalid Credentials"});
             });
-        });
+        }
     });
 });
-
 
 module.exports = router;

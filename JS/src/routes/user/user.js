@@ -49,9 +49,14 @@ router.delete("/user/:id", jsonparser,(reqe, rese, next) => {
     jwt.verify(token,process.env.TOKENSECRET, (err, verifiedJwt) => {
         if (err) return rese.send({" msg ": " Token is not valid "})
         var middleware = reqe.params.id;
-        con.query('DELETE FROM user WHERE id = ?', [middleware], function(error, results, fields) {
-            if (error) return rese.send({"msg": "Not found"});
-            rese.status(200).json;
+        con.query('SELECT * FROM user WHERE id = ?', [middleware], function(error, results, fields) {
+            if (results[0] == undefined) return rese.send({"msg": "Not found"});
+            else {
+                con.query('DELETE FROM user WHERE id = ?', [middleware], function(error, results, fields) {
+                    if (error) return rese.send({"msg": "Not found"});
+                    else rese.send({"msg": "Successfully deleted record number : "+ middleware});
+                });
+            };
         });
     });
 });

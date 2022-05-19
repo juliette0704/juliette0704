@@ -7,6 +7,7 @@ const router = express();
 const dotenv = require('dotenv');
 const bodyParser = require("body-parser");
 const jwt = require('jsonwebtoken');
+const res = require("express/lib/response");
 require('dotenv').config();
 
 var con = mysql.createConnection({
@@ -17,7 +18,9 @@ var con = mysql.createConnection({
 });
 
 con.connect(function(err) {
-
+    if (err) {
+        console.log({"msg": "Internal server error"});
+    }
 });
 
 module.exports = con;
