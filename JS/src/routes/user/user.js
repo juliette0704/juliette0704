@@ -35,7 +35,8 @@ router.get("/user/todos",jsonparser, (reqe, rese, next) => {
             if (error) return rese.send({"msg": "Not found"});
             var iduse = results[0]['id'];
             con.query('select * from todo where user_id = ?', [iduse], function(error2, results2, fields2) {
-                rese.send(results2);
+                if (results[0] == undefined) return rese.send({"msg": "Not found"}); // a verifier
+                else rese.send(results2);
             });
         }); 
     });
@@ -54,7 +55,7 @@ router.delete("/user/:id", jsonparser,(reqe, rese, next) => {
             else {
                 con.query('DELETE FROM user WHERE id = ?', [middleware], function(error, results, fields) {
                     if (error) return rese.send({"msg": "Not found"});
-                    else rese.send({"msg": "Successfully deleted record number : "+ middleware});
+                    else rese.send({"msg": "Successfully deleted record number : " + middleware});
                 });
             };
         });

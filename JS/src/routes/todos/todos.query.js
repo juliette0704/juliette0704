@@ -23,7 +23,7 @@ router.delete("/todos/:id",jsonparser, (reqe, rese, next) => {
                     if (error) return rese.send({"msg": "Internal server error"});
                     rese.send({"msg": "Successfully deleted record number :" + middleware});
                 });
-            }
+            };
         });
     });
 });

@@ -23,14 +23,15 @@ DROP TABLE IF EXISTS `todo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `todo` (
-  `id` int(11) DEFAULT NULL,
-  `title` text DEFAULT NULL,
-  `decription` text DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` text NOT NULL,
+  `description` text NOT NULL,
   `created_at` date DEFAULT NULL,
-  `due_time` date DEFAULT NULL,
-  `status` int(11) DEFAULT NULL,
-  `user_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `due_time` date NOT NULL,
+  `status` text DEFAULT 'not started',
+  `user_id` mediumint(8) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -50,13 +51,15 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
-  `id` int(11) DEFAULT NULL,
-  `email` text DEFAULT NULL,
-  `password` text DEFAULT NULL,
-  `name` text DEFAULT NULL,
-  `firstname` text DEFAULT NULL,
-  `created_at` date DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` text NOT NULL,
+  `password` text NOT NULL,
+  `name` text NOT NULL,
+  `firstname` text NOT NULL,
+  `created_at` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`) USING HASH
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -77,4 +80,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-10 17:01:36
+-- Dump completed on 2022-05-20 15:02:09

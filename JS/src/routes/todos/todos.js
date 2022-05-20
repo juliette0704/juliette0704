@@ -69,19 +69,16 @@ router.put("/todos/:id",jsonparser, (reqe, rese, next) => {
             else if (results2[0] == undefined) return rese.send({"msg": "Not Found"});
             else {
                 con.query('update todo set title = ?, description = ?, status = ?, user_id = ?, due_time, ? where id = ?', [user.title, user.description, user.status, user.user_id, user.due_time, middleware], function(error, results, fields) {
-                    // if (error) return rese.send({"msg":"Internal server error"});
-                    // else {
-                        con.query('select * from todo where id = ?', [middleware], function(error2, results2, fields2) {
-                            if (error2) rese.send({"msg": "Internal server error"});
-                            else {
-                                rese.send(user);
-                            };
-                        });
-                    // };
+                    con.query('select * from todo where id = ?', [middleware], function(error2, results2, fields2) {
+                        if (error2) rese.send({"msg": "Internal server error"});
+                        else {
+                            rese.send(user);
+                        };
+                    });
                 });
-                }
-            });
+            }
         });
+    });
 });
 
 module.exports = router;
